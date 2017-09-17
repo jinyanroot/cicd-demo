@@ -17,7 +17,7 @@ b. 配置阿里云的加速器：
 ```
     
 # 准备
-1. 在机器上执行start.sh<br>
+1. 在机器上执行prepare.sh<br>
 2. 等待30秒后，在浏览器中访问http://HOST_IP:8081<br>
 3. 依次点击Jenkins的系统管理-管理节点-新建节点，相关配置如下：<br>
    Name:slave-java<br>
