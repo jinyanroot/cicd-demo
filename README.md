@@ -4,14 +4,14 @@
 # 要求
 1. 运行机器为Centos 7，其它Linux发行版本和Windows版本暂未测试，理论上都是可以运行的。<br>
 2. 安装Docker 17.06.2-ce，有以下两个地方需要特别配置：<br>
-    a.将/usr/lib/systemd/system/docker.service中的ExecStart行改为如下：<br>
+a.将/usr/lib/systemd/system/docker.service中的ExecStart行改为如下：<br>
 ```Bash
 ExecStart=/usr/bin/dockerd -H tcp://HOST_IP:2375 -H unix:///var/run/docker.sock<br>
 ```
-    b.配置了阿里云的加速器：
+b.配置了阿里云的加速器：
 ```Bash
-# cat /etc/docker/daemon.json<br>
-{<br>
+# cat /etc/docker/daemon.json
+{
     "registry-mirrors": ["https://tgw7pqgq.mirror.aliyuncs.com"]
 }
 ```
