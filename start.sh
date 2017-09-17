@@ -24,6 +24,9 @@ sleep 3
 docker cp `pwd`/slave-java/change_sshd.sh slave-java:/root
 docker exec slave-java "/root/change_sshd.sh"
 
+# Copy jenkins files
+rm -rf /var/jenkins_home && cp -r jenkins_home/ /var/
+
 # Start Jenkins
 docker run -d -u root \
        --name jenkins \
@@ -34,5 +37,5 @@ docker run -d -u root \
        -p 50000:50000 \
        -v /var/run/docker.sock:/var/run/docker.sock \
        -v $(which docker):/bin/docker \
-       -v `pwd`/jenkins_home:/var/jenkins_home \
+       -v /var/jenkins_home:/var/jenkins_home \
        registry.aliyuncs.com/acs-sample/jenkins:2.19.2
