@@ -21,6 +21,7 @@ if [[ $? -ne 0 ]];then echo 'Start Slave Faild'; exit 1; fi
 sleep 3
 
 # Permit root login slave-java
+chmod 755 `pwd`/slave-java/change_sshd.sh
 docker cp `pwd`/slave-java/change_sshd.sh slave-java:/root
 docker exec slave-java "/root/change_sshd.sh"
 
