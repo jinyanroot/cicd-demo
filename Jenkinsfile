@@ -45,7 +45,7 @@ stage name:'deploy', concurrency: 1
 		// according to the jobs' parameters,we can deploy dev/test/staging/prod flexibly
 		if (DEPLOY_EVE == 'dev') {
 			// connect to dev server
-			withDockerServer([uri: 'tcp://' + dev_docker_ip + ':22375']) {
+			withDockerServer([uri: 'tcp://' + dev_docker_ip + ':2375']) {
 				// clean the last container
 				try {
 					sh "docker rm -f dev-war-jinyanroot dev-statics-jinyanroot"
