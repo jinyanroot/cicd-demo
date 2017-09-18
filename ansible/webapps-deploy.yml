@@ -1,0 +1,18 @@
+---
+- hosts: '{{ hosts }}'
+  name: deploy webapps
+  gather_facts: false
+  environment:
+    LANG: en_US.UTF-8
+    LC_ALL: en_US.UTF-8
+  vars:
+    CATALINA_HOME: /usr/local/tomcat
+  tasks:
+   - name: Stop Tomcat
+     shell: source /etc/profile;ps -ef | grep {{ CATALINA_HOME }} |grep -v grep | awk '{print $2}' |xargs kill -9;rm -rf {{ CATALINA_HOME }}/webapps/*
+     
+   - name: Copy war
+     copy: src={{ war_path }} dest={{ CATALINA_HOME }}/webapps/
+
+   - name: Start Tomcat
+     shell: source /etc/profile;{{ CATALINA_HOME }}/bin/startup.sh

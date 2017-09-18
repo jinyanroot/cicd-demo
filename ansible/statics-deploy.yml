@@ -1,0 +1,18 @@
+---
+- hosts: '{{ hosts }}'
+  name: deploy webapps
+  gather_facts: false
+  environment:
+    LANG: en_US.UTF-8
+    LC_ALL: en_US.UTF-8
+  vars:
+    STATICS_HOME: /usr/share/nginx/html/
+  tasks:
+   - name: Clean last files
+     shell: chdir={{ STATICS_HOME }} rm -rf *
+  
+   - name: Copy statics
+     copy: src={{ statics_path }} dest={{ STATICS_HOME }}
+     
+   - name: Unzip statics
+     shell: chdir={{ STATICS_HOME }} /usr/bin/unzip -q -o {{ statics_path | basename }}

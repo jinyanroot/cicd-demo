@@ -1,0 +1,7 @@
+---
+- hosts: '{{ hosts }}'
+  name: rsync sshs to clients
+  gather_facts: false
+  tasks:
+   - name: copy root key to root
+     authorized_key: user="root" key="{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"

@@ -26,7 +26,8 @@ stage name:'deploy', concurrency: 1
 	node('master') {
 		// define variable
 		def dev_docker_ip = "192.168.62.188"
-		def test_docker_ip = "192.168.62.188"
+		def staging_war_ip = "192.168.62.188"
+		def staging_statics_ip = "192.168.62.188"
 		def war_image = docker.image('tomcat:7')
 		def statics_image = docker.image('nginx')
 		def cur_build_path = JENKINS_HOME + "/jobs/" + JOB_NAME + \
@@ -69,7 +70,21 @@ stage name:'deploy', concurrency: 1
 		} else if (DEPLOY_EVE == 'test') {
 			echo 'test'
 		} else if (DEPLOY_EVE == 'staging') {
-			echo 'staging'
+			// set up login without password
+			sh "ansible-playbook ansible/rsync_key.yml \
+			    -i ansible/host -e hosts=${staging_war_ip}"
+			sh "ansible-playbook ansible/rsync_key.yml \
+			    -i ansible/host -e hosts=${staging_statics_ip}"
+			
+			// deploy war
+			sh "ansible-playbook ./ansible/webapps-deploy.yml \
+			    -i ./ansible/host -e hosts=${staging_ip} \
+			    -e war_path=${war_path}/company-news-0.0.1-SNAPSHOT.war"
+			
+			// deploy statics
+			sh "ansible-playbook ./ansible/statics-deploy.yml \
+			    -i ./ansible/host -e hosts=${staging_ip} \
+			    -e statics_path=${statics_path}/company-news-0.0.1-SNAPSHOT.zip"
 		} else if (DEPLOY_EVE == 'prod') {
 			echo 'prod'
 		} else {
