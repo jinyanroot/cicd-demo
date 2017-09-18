@@ -30,5 +30,22 @@ b. 配置阿里云的加速器：
        Credentials:帐号root，密码root@123（即slave-java/change_sshd.sh中设置的）<br>
   
 # 使用
-1. 提交代码，本demo以https://github.com/jinyanroot/company-news.git为例<br>
-2. 在Jenkins中执行job:company-news-cd，选择需要发布的环境<br>
+1. 开发人员在本地提交代码。示例Demo：https://github.com/jinyanroot/company-news.git<br>
+2. 根据实际环境，修改相关配置：
+3. 在Jenkins中执行job:company-news-cd，选择需要发布的环境<br>
+
+# 待改进
+因时间关系，还有不少可以改进的地方，如下：<br>
+1. 兼容其它Linux发行版本和Windows版本。<br>
+2. 动态的生成Jenkins slave，用完即销毁。<br>
+3. 定制Docker的Jenkins image和Jenkins slave image，以减少脚本优化或避免手动设置。<br>
+4. 启动sonar server，让stage 'test'可以做代码静态质量检查等。<br>
+5. 完善deploy阶段的test和prod。<br>
+6. deploy staging阶段使用jenkins pipeline ansible plugin，以替换shell。<br>
+7. 对deploy至test、staging、prod做准入。<br>
+8. 完善安全相关配置，例如非root启动程序、不明文存放密码等。<br>
+8. 
+
+# 特别说明
+1. 考虑到效率问题，Jenkins选择了master-slave架构。<br>
+
