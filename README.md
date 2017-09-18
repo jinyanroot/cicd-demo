@@ -6,7 +6,7 @@
 ###### 2. 安装Docker 17.06.2-ce，有以下两个地方需要特别配置：<br>
 a. 将/usr/lib/systemd/system/docker.service中的ExecStart行改为如下：<br>
 ```Bash
-ExecStart=/usr/bin/dockerd -H tcp://HOST_IP:2375 -H unix:///var/run/docker.sock<br>
+ExecStart=/usr/bin/dockerd -H tcp://HOST_IP:2375 -H unix:///var/run/docker.sock
 ```
 b. 配置阿里云的加速器：
 ```Bash
