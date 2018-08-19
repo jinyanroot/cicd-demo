@@ -1,14 +1,4 @@
 #!/bin/bash
-# -----------------------------------------------------------------------------
-# Filename:      start.sh
-# Encoding:      UTF-8
-# Date:          2017/9/15
-# Author:        jinyanroot
-# Email:         jinyanroot@gmail.com
-# Function:      
-# Usage:         Just run it
-# Version:       1.0
-# -----------------------------------------------------------------------------
 
 # Start Jenkins Slave
 docker run -d \
