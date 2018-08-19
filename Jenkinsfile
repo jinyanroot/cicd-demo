@@ -25,7 +25,6 @@ stage 'test'
 stage name:'deploy', concurrency: 1
 	node('master') {
 		// define variable
-		def dev_docker_ip = "192.168.62.188"
 		def staging_war_ip = "192.168.62.188"
 		def staging_statics_ip = "192.168.62.188"
 		def war_image = docker.image('tomcat:7')
@@ -43,31 +42,8 @@ stage name:'deploy', concurrency: 1
 			&& cp ${cur_build_path}/*.zip ${statics_path} \
 			&& unzip -q ${statics_path}/*.zip -d ${statics_path}"
 			
-		// according to the jobs' parameters,we can deploy dev/test/staging/prod flexibly
-		if (DEPLOY_EVE == 'dev') {
-			// connect to dev server
-			withDockerServer([uri: 'tcp://' + dev_docker_ip + ':2375']) {
-				// clean the last container
-				try {
-					sh "docker rm -f dev-war-jinyanroot dev-statics-jinyanroot"
-					echo "rm container:dev-war-jinyanroot,dev-statics-jinyanroot"
-				} catch(e) {
-					echo "container:dev-war-jinyanroot or \
-					      dev-statics-jinyanroot isn't exist"
-				}
-				
-				// run the containers of war and statics
-				def war_container = war_image.run("--name dev-war-jinyanroot \
-				                          -p 8080:8080 -v " + war_path + \
-										  ":/usr/local/tomcat/webapps")
-				def statics_container = statics_image.run("--name dev-statics-jinyanroot \
-				                          -p 80:80 -v " + statics_path + \
-										  ":/usr/share/nginx/html")
-			
-				echo "Your dev env is:http://" + dev_docker_ip + \
-				     ":8080/company-news-0.0.1-SNAPSHOT"
-			}
-		} else if (DEPLOY_EVE == 'test') {
+		// according to the jobs' parameters,we can deploy test/staging/prod flexibly
+		if (DEPLOY_EVE == 'test') {
 			echo 'test'
 		} else if (DEPLOY_EVE == 'staging') {
 			// set up login without password
@@ -78,13 +54,13 @@ stage name:'deploy', concurrency: 1
 			
 			// deploy war
 			sh "ansible-playbook ./ansible/webapps-deploy.yml \
-			    -i ./ansible/host -e hosts=${staging_ip} \
-			    -e war_path=${war_path}/company-news-0.0.1-SNAPSHOT.war"
+			    -i ./ansible/host -e hosts=${staging_war_ip} \
+			    -e war_path=${war_path}/company-news.war"
 			
 			// deploy statics
 			sh "ansible-playbook ./ansible/statics-deploy.yml \
-			    -i ./ansible/host -e hosts=${staging_ip} \
-			    -e statics_path=${statics_path}/company-news-0.0.1-SNAPSHOT.zip"
+			    -i ./ansible/host -e hosts=${staging_statics_ip} \
+			    -e statics_path=${statics_path}/company-news.zip"
 		} else if (DEPLOY_EVE == 'prod') {
 			echo 'prod'
 		} else {

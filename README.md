@@ -1,7 +1,9 @@
 # 介绍
 ##### 这是一个持续集成和持续发布的Demo，它可以在Windows、Linux环境使用。
-##### windows-use(localdev).bat：本地开发环境，它会编译代码，打包并使用docker启动
-##### linux-use(cicd).sh：CICD环境，它会部署Jenkins，并内置了一个pipeline Job
+```Bash
+localdev-windows.bat：本地开发环境，它会编译代码，打包并使用docker启动
+cicd-linux.sh：CICD环境，它会部署Jenkins，并内置了一个pipeline Job
+```
 
 # 1.本地开发环境
 ## 1.1 要求
@@ -60,15 +62,21 @@ line 28/29/30：配置各环境的IP
 
 # 3.待改进
 因时间关系，还有不少可以改进的地方，如下：
-1. 兼容其它Linux发行版本和Windows版本。
-2. 动态的生成Jenkins slave，用完即销毁。
-3. 定制Docker的Jenkins image和Jenkins slave image，以减少脚本优化或避免手动设置。
-4. 启动sonar server，让stage 'test'可以做代码静态质量检查等。
-5. 完善deploy阶段的test和prod。
-6. deploy staging阶段使用jenkins pipeline ansible plugin，以替换shell。
-7. 对deploy至test、staging、prod做准入。
-8. 完善安全相关配置，例如非root启动程序、不明文存放密码等。
+1. 动态的生成Jenkins slave，用完即销毁。
+2. 定制Docker的Jenkins image和Jenkins slave image，以减少脚本优化或避免手动设置。
+3. 启动sonar server，让stage 'test'可以做代码静态质量检查等。
+4. 完善deploy阶段的test和prod。
+5. deploy staging阶段使用jenkins pipeline ansible plugin，以替换shell。
+6. 对deploy至test、staging、prod做准入。
+7. 完善安全相关配置，例如非root启动程序、不明文存放密码等。
 
-# 特别说明
-1. 考虑到效率问题，Jenkins选择了master-slave架构。
+# 4. 特别说明
+## 4.1高可用
+### a.如果是公用云，相对简单，可以用云服务提供商的SLB+Nginx机器+应用集群，如有更高要求，可以建不同可用区，甚至用不同区域；
+###b.如果是私用云，需要考虑防火墙、交换机、服务器、存储等所有硬件的高可用，甚至还需要考虑多机房；
+## 4.2监控报警
+中小规模，可以用Zabbix+插件+脚本，基本能满足对OS、应用、业务的监控和报警
+## 4.3日志
+可以使用filebeat+logstash+kafka+es+kibana来收集、存储、查询日志
+
 
